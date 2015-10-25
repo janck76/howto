@@ -1,0 +1,99 @@
+#!/bin/bash -
+#===============================================================================
+#
+#          FILE:  howto
+#
+#         USAGE:  howtow [FILE]
+#
+#   DESCRIPTION:
+#
+#===============================================================================
+
+#set -o nounset                              # Treat unset variables as an error
+
+dir=~/howto
+file=$1
+pattern=$2
+
+echoerr() { echo "$@" 1>&2; }
+usage() {
+    echoerr 'Usage: '
+    echoerr '    howto [filename]'
+    echoerr '    howto [-s pattern]'
+    echoerr '    howto [-e filename]'
+}
+
+if [[ $file == '' ]]; then
+    usage
+    exit 1
+fi
+
+if [[ ! $file =~ ^[/.] ]]; then
+    file="$dir/$file"
+fi
+
+filename=$(basename "$file")
+extension="${filename##*.}"
+filename="${filename%.*}"
+
+if [[ $1 =~ ^-[es]$ ]]; then
+    if [[ -z $pattern ]]; then
+        usage
+        exit 1
+    fi
+    
+    file="$dir/$2"
+    extension="${file##*.}"
+
+    if [ $1 == '-e' ]; then
+        vim $file
+        exit
+    fi
+#    if [[ $pattern =~ .*:(.*) ]]; then
+#        file=$dir/${BASH_REMATCH[1]}
+#        extension="${file##*.}"
+#    else
+#        egrep --include=\*.{txt,htm,html} -R -l -w $pattern $dir/ | sed 's/.*howto\/\(.*\)/\1/'
+#        exit
+#    fi
+fi
+
+if [ -f  "$file" ]; then
+    echo $file
+    case $extension in
+        # File extensions må også oppdateres i _howto completion for zsh
+        pdf)
+            zathura "$file" &>/dev/null &
+        ;;
+        html|htm)
+            firefox "$file" &>/dev/null &
+        ;;
+        xmind)
+            XMind "$file" &>/dev/null &
+        ;;
+        chm)
+            xchm "$file" &>/dev/null &
+        ;;
+        md)
+            html=/tmp/${filename}.html
+            grip "$file" --gfm --export $html >/dev/null
+            firefox "$html" &>/dev/null &
+            echo "CTRL+WIN+2 for å vise firefox"
+        ;;
+        txt)
+            cat "$file"
+        ;;
+        epub)
+            lucidor "$file" &>/dev/null &
+        ;;
+        *)
+            echoerr Unkown file type
+            exit 1
+        ;;
+    esac
+else 
+    echoerr "File not found: $file"
+    exit 1
+fi
+
+
