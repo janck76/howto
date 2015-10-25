@@ -6,10 +6,9 @@
 #         USAGE:  howtow [FILE]
 #
 #   DESCRIPTION:
+#   zsh completion: $HOME/.zsh_custom/completions/_howto
 #
 #===============================================================================
-
-#set -o nounset                              # Treat unset variables as an error
 
 dir=~/howto
 file=$1
