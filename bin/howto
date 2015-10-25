@@ -24,6 +24,10 @@ usage() {
     echoerr '    howto [-e filename]'
 }
 
+hint_firefox() {
+    echo "CTRL+WIN+2 for å vise firefox"
+}
+
 if [[ $file == '' ]]; then
     usage
     exit 1
@@ -44,7 +48,7 @@ if [[ $1 =~ ^-[es]$ ]]; then
         usage
         exit 1
     fi
-    
+
     file="$dir/$2"
     extension="${file##*.}"
 
@@ -52,13 +56,6 @@ if [[ $1 =~ ^-[es]$ ]]; then
         vim $file
         exit
     fi
-#    if [[ $pattern =~ .*:(.*) ]]; then
-#        file=$dir/${BASH_REMATCH[1]}
-#        extension="${file##*.}"
-#    else
-#        egrep --include=\*.{txt,htm,html} -R -l -w $pattern $dir/ | sed 's/.*howto\/\(.*\)/\1/'
-#        exit
-#    fi
 fi
 
 if [ -f  "$file" ]; then
@@ -70,6 +67,7 @@ if [ -f  "$file" ]; then
         ;;
         html|htm)
             firefox "$file" &>/dev/null &
+            hint_firefox
         ;;
         xmind)
             XMind "$file" &>/dev/null &
@@ -81,7 +79,7 @@ if [ -f  "$file" ]; then
             html=$tmp/${filename}.html
             grip "$file" --gfm --export $html >/dev/null
             firefox "$html" &>/dev/null &
-            echo "CTRL+WIN+2 for å vise firefox"
+            hint_firefox
         ;;
         txt)
             cat "$file"
@@ -94,9 +92,7 @@ if [ -f  "$file" ]; then
             exit 1
         ;;
     esac
-else 
+else
     echoerr "File not found: $file"
     exit 1
 fi
-
-
