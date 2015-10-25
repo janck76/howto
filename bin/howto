@@ -81,7 +81,7 @@ if [ -f  "$file" ]; then
             hint_firefox
         ;;
         txt)
-            cat "$file"
+            less -RFX "$file"
         ;;
         epub)
             lucidor "$file" &>/dev/null &
