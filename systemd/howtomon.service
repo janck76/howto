@@ -1,0 +1,10 @@
+
+[Unit]
+Description=Check status of hwoto git repo
+
+[Service]
+ExecStart=/bin/bash %h/bin/howto_mon.sh
+Restart=on-success
+
+[Install]
+WantedBy=default.target

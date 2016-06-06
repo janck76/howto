@@ -1,0 +1,9 @@
+[Unit]
+Description=Run recoll indexing of ~/howto
+Wants=hourly-timer.target
+
+[Service]
+ExecStart=/usr/bin/recollindex -c %h/.recoll_howto
+
+[Install]
+WantedBy=hourly-timer.target
