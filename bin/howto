@@ -18,13 +18,13 @@ tmp=/tmp/howto
 echoerr() { echo "$@" 1>&2; }
 usage() {
     echoerr 'Usage: '
-    echoerr '    howto [filename]'
-    echoerr '    howto [-s pattern]'
-    echoerr '    howto [-e filename]'
+    echoerr '    View     howto [filename]'
+    echoerr '    Less     howto [-l filename]'
+    echoerr '    Search   howto [-s pattern]'
+    echoerr '    Edit     howto [-e filename]'
 }
-
-hint_firefox() {
-    echo "CTRL+WIN+2 for å vise firefox"
+desktop_hint() {
+    echo 'WIN+CTRL+2 for å vise desktop 2'
 }
 
 if [[ $file == '' ]]; then
@@ -42,7 +42,7 @@ filename=$(basename "$file")
 extension="${filename##*.}"
 filename="${filename%.*}"
 
-if [[ $1 =~ ^-[es]$ ]]; then
+if [[ $1 =~ ^-[els]$ ]]; then
     if [[ -z $pattern ]]; then
         usage
         exit 1
@@ -55,6 +55,11 @@ if [[ $1 =~ ^-[es]$ ]]; then
         vim $file
         exit
     fi
+
+    if [ $1 == '-l' ]; then
+        less -RFX $file
+        exit
+    fi
 fi
 
 if [ -f  "$file" ]; then
@@ -65,8 +70,8 @@ if [ -f  "$file" ]; then
             zathura "$file" &>/dev/null &
         ;;
         html|htm)
-            firefox "$file" &>/dev/null &
-            hint_firefox
+            chromium "$file" &>/dev/null &
+            desktop_hint
         ;;
         xmind)
             XMind "$file" &>/dev/null &
@@ -76,9 +81,14 @@ if [ -f  "$file" ]; then
         ;;
         md)
             html=$tmp/${filename}.html
-            grip "$file" --gfm --export $html >/dev/null
-            firefox "$html" &>/dev/null &
-            hint_firefox
+            if ! md2html &>/dev/null; then
+                less -RFX "$file"
+                exit
+            fi 
+
+            md2html "$file" $html >/dev/null
+            chromium "$html" &>/dev/null &
+            desktop_hint
         ;;
         txt)
             less -RFX "$file"
