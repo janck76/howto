@@ -15,7 +15,7 @@ NOTIFY_TIMEOUT=60000 #ms
 cd $HOME/howto
 
 while [[ true ]]; do
-  git fetch origin
+  git pull
   status=$(git status --porcelain --branch|egrep -v '## master...origin/master$')
   if [[ ! -z $status ]]; then
     notify-send -u normal -t $NOTIFY_TIMEOUT 'howto repo needs updating' "$status"
