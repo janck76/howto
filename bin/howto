@@ -89,7 +89,7 @@ if [ -f  "$file" ]; then
                 exit
             fi 
 
-            md2html "$file" $html >/dev/null
+            md2html "$file" "$html" >/dev/null
             chromium "$html" &>/dev/null &
             desktop_hint
         ;;
