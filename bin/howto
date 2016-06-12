@@ -16,6 +16,7 @@ pattern=$2
 tmp=/tmp/howto
 
 echoerr() { echo "$@" 1>&2; }
+
 usage() {
     echoerr 'Usage: '
     echoerr '    View     howto [filename]'
@@ -23,8 +24,10 @@ usage() {
     echoerr '    Search   howto [-s pattern]'
     echoerr '    Edit     howto [-e filename]'
 }
+
 desktop_hint() {
-    echo 'WIN+CTRL+2 for å vise desktop 2'
+    xdotool key super+ctrl+2
+    echo 'WIN+CTRL+2 for å vise/skjule desktop 2'
 }
 
 if [[ $file == '' ]]; then
