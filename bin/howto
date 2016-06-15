@@ -26,7 +26,6 @@ usage() {
 }
 
 desktop_hint() {
-    xdotool key super+ctrl+2
     echo 'WIN+CTRL+2 for å vise/skjule desktop 2'
 }
 
